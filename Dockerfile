@@ -1,5 +1,5 @@
 # Development stage
-FROM node:16 as development
+FROM node:18.12.1 as development
 WORKDIR /usr/src/app
 COPY package*.json tsconfig.json ./
 RUN npm install
