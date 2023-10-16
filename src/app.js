@@ -1,6 +1,8 @@
 import express, { json } from 'express'
 import morgan from 'morgan'
 import cors from "cors";
+import routerSub from './routes/subscriber.routes.js';
+import routerPub from './routes/publisher.routes.js';
 const app = express()
 
 app.all('*', function (req, res, next) {
@@ -14,6 +16,6 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 // app.use(json({ limit: '100mb' }));
-//app.use('/',)
+app.use(routerSub,routerPub)
 
 export default app;
