@@ -1,37 +1,45 @@
 import mqtt from 'mqtt'
-import { SerialPort,ReadlineParser } from "serialport";
+import { SerialPort, ReadlineParser } from "serialport";
 //------------------------  arduino ----------------------
-const port = new SerialPort({
-  path: "COM2",
-  baudRate: 9600,
-});
-const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+// const port = new SerialPort({
+//   path: "COM2",
+//   baudRate: 9600,
+// });
+// const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
 //------------------------- pub ---------------------
-const pub = mqtt.connect("mqtt://localhost:9000");
 
-export async function publishA(req,res) {
-    pub.on("connect", () => {
-      parser.on("data", (arduino_data) => {
-        arduino_data = arduino_data.toString();
-        arduino_data = arduino_data.split(" ");
-        topic = arduino_data[0];
-        dataSend = arduino_data[1];
-        pub.publish(topic, dataSend);
-      });
+export async function publishA(req, res) {
+  const port = new SerialPort({
+    path: "COM1",
+    baudRate: 9600,
+  });
+  const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+  const pub = mqtt.connect("mqtt://localhost:9000");
+
+  pub.on("connect", () => {
+    parser.on("data", (arduino_data) => {
+      arduino_data = arduino_data.toString();
+      arduino_data = arduino_data.split(" ");
+      topic = arduino_data[0];
+      dataSend = arduino_data[1];
+      console.log('topic :>> ', topic);
+      console.log('dataSend :>> ', dataSend);
+      pub.publish(topic, dataSend);
     });
-    
-    port.on("open", () => {
-      console.log("Conexión serial abierta en COM2");
-    });
-    
-    port.on("error", (err) => {
-      console.error("Error en la conexión serial:", err);
-    });
+  });
+
+  port.on("open", () => {
+    console.log("Conexión serial abierta en COM2");
+  });
+
+  port.on("error", (err) => {
+    console.error("Error en la conexión serial:", err);
+  });
 }
 
-export async function publishB(req,res) {
-    console.log("------------req: ", req.body);
-
+export async function publishB(req, res) {
+  console.log("------------req: ", req.body);
+  const pub = mqtt.connect("mqtt://localhost:9000");
   // Publica un mensaje en un tema MQTT
   const topic = "pub"; // Reemplaza por el tema MQTT que desees
   const message = "1.(Mensaje desde Express msj<" + req.body + "> )"; // Reemplaza por el mensaje que desees enviar
@@ -48,3 +56,6 @@ export async function publishB(req,res) {
     }
   });
 }
+
+//actual: temp,luz,aire,proximidad
+//notificaciones: tipoNotificacion

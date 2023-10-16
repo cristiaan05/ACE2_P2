@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { publishB } from "../controllers/pub";
+import { publishA, publishB } from "../controllers/pub.js";
 const routerPub=Router();
 
 routerPub.get('/pub',publishB);
+routerPub.get('/pubA',publishA);
 export default routerPub;
