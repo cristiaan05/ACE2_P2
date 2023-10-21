@@ -25,4 +25,4 @@ ENV WEB_SERVER_HOST=localhost
 EXPOSE 3000
 
 # Comando para iniciar la aplicación, en este caso, npm run dev
-CMD ["node", "/src/controllers/broker.js"]
+CMD ["npm", "run", "dev"]
