@@ -2,9 +2,7 @@ import mqtt from 'mqtt'
 import mysql from 'mysql2'
 let get = true;
 const Topic = "pub";
-
-export async function subscriberMQTT(req, res) {
-    const sub = mqtt.connect("mqtt://localhost:9000");
+const sub = mqtt.connect("mqtt://localhost:9000");
     // console.log('sub :>> ', sub);
     sub.on("connect", () => {
         sub.subscribe(Topic);
@@ -14,9 +12,6 @@ export async function subscriberMQTT(req, res) {
         console.log("topic: ", topic, "  msj: ", message.toString());
     });
 
-    res.send(sub)
-
     const inserData = async (data) => {
         console.log('data :>> ', data);
     }
-}
