@@ -2,7 +2,7 @@
 FROM node:18.12.1
 
 # Establecemos el directorio de trabajo en /app
-WORKDIR /app
+WORKDIR /src/controllers/broker
 
 # Copiamos los archivos de tu proyecto al directorio de trabajo en el contenedor
 COPY . .
