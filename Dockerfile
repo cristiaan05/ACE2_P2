@@ -22,7 +22,7 @@ ENV DISABLE_DB_LOGS=true
 ENV SERVER_PORT=3000
 ENV WEB_SERVER_HOST=localhost
 # Exponemos el puerto en el que la aplicación va a escuchar
-EXPOSE 3000
+EXPOSE 9000
 
 # Comando para iniciar la aplicación, en este caso, npm run dev
 CMD ["npm", "run", "dev"]
