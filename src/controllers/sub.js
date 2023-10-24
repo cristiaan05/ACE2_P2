@@ -39,24 +39,24 @@ export async function subscriberMQTT(req, res) {
     const message = "Mensaje de prueba";
 
     // Si el tópico coincide con "ARQUI2_G13_PA", envía el mensaje al Arduino
-    sendToArduino(topic);
+    //endToArduino(topic);
 
     // Función para enviar datos al Arduino (simulado)
-    function sendToArduino(data) {
-        const port = new SerialPort({
-            path: arduinoPortPath,
-            baudRate: arduinoBaudRate,
-        });
+    //function sendToArduino(data) {
+    const port = new SerialPort({
+        path: arduinoPortPath,
+        baudRate: arduinoBaudRate,
+    });
 
-        port.on("open", () => {
-            console.log("Conexión serial abierta en " + arduinoPortPath + " " + arduinoBaudRate);
-            port.write(data);
-            console.log(data);
-            port.close();
-        });
+    port.on("open", () => {
+        console.log("Conexión serial abierta en " + arduinoPortPath + " " + arduinoBaudRate);
+        port.write(topic);
+        console.log(topic);
+        port.close();
+    });
 
-        port.on("error", (err) => {
-            console.error("Error en la conexión serial:", err);
-        });
-    }
+    port.on("error", (err) => {
+        console.error("Error en la conexión serial:", err);
+    });
+    //}
 }
