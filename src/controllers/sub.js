@@ -53,10 +53,12 @@ export async function subscriberMQTT(req, res) {
         port.write(topic);
         console.log(topic);
         port.close();
+        return res.send("Realizado con exito")
     });
 
     port.on("error", (err) => {
         console.error("Error en la conexión serial:", err);
+        return res.send("Error en la conexión serial:", err)
     });
     //}
 }
