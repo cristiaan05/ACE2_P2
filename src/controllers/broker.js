@@ -6,7 +6,7 @@ const broker = new mosca.Server({
 });
 
 broker.on("ready", () => {
-  console.log("<Server mosca On ,port:" + port + ">");
+  console.log("<SERVER BROKER PORT:" + port + ">");
 });
 
 broker.on("clientConnected", (client) => {

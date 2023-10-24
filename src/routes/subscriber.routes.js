@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { subscriberMQTT } from "../controllers/sub.js";
-const routerSub=Router();
+const routerSub = Router();
 
-routerSub.get('/sub',subscriberMQTT);
+routerSub.get('/sub', subscriberMQTT);
 export default routerSub;
