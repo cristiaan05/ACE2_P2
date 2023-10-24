@@ -2,7 +2,7 @@
 FROM node:18.12.1
 
 # Establecemos el directorio de trabajo en /app
-WORKDIR /src/controllers/broker
+WORKDIR /app
 
 # Copiamos los archivos de tu proyecto al directorio de trabajo en el contenedor
 COPY . .
@@ -22,7 +22,7 @@ ENV DISABLE_DB_LOGS=true
 ENV SERVER_PORT=3000
 ENV WEB_SERVER_HOST=localhost
 # Exponemos el puerto en el que la aplicación va a escuchar
-EXPOSE 9000
+EXPOSE 3000
 
 # Comando para iniciar la aplicación, en este caso, npm run dev
 CMD ["npm", "run", "dev"]
