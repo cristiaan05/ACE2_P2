@@ -81,9 +81,11 @@ export async function leerSensores(req, res) {
       gasData = arduino_data[7];
       disTopic = arduino_data[8];
       disData = arduino_data[9];
-      console.log('topic :>> ', topic);
-      console.log('dataSend :>> ', dataSend);
-      pub.publish(topic, dataSend);
+      pub.publish(humedadTopic, humedadData);
+      pub.publish(tempTopic, tempData);
+      pub.publish(luzTopic, luzData);
+      pub.publish(gasTopic, gasData);
+      pub.publish(disTopic, disData);
       db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES (tempData,luzTopic,gasTopic,disTopic)`, (err, rows) => {
         if (err) throw err;
         console.log(rows);
