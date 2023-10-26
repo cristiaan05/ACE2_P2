@@ -59,8 +59,14 @@ export async function publishB(req, res) {
     });
   });
 }
-
+let processingData = false;
 export async function leerSensores(req, res) {
+  if (processingData) {
+    res.status(400).send("Procesamiento en curso");
+    return;
+  }
+
+  processingData = true; // Marca que se está procesando datos
   try {
     const port = new SerialPort({
       path: "COM5",
@@ -97,14 +103,18 @@ export async function leerSensores(req, res) {
 
     port.on("open", () => {
       console.log("Conexión serial abierta en COM2");
+      processingData = true;
     });
 
     port.on("error", (err) => {
       console.error("Error en la conexión serial:", err);
       res.status(500).send("Error en la conexión serial:");
+      processingData = false;
     });
+    processingData = false;
   } catch (error) {
     console.error(error);
+    processingData = false;
     res.status(500).send("Error interno del servidor");
   }
 }
