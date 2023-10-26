@@ -87,7 +87,7 @@ export async function leerSensores(req, res) {
       pub.publish(luzTopic, luzData);
       pub.publish(gasTopic, gasData);
       pub.publish(disTopic, disData);
-      db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES (tempData,luzTopic,gasTopic,disTopic)`, (err, rows) => {
+      db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${disData})`, (err, rows) => {
         if (err) throw err;
         console.log(rows);
       });
