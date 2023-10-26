@@ -90,9 +90,8 @@ export async function leerSensores(req, res) {
       pub.publish(disTopic, disData);
       db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
         if (err) throw err;
-        console.log(rows);
+        return res.send("OK")
       });
-      return res.send("OK")
     });
   });
 
@@ -135,9 +134,8 @@ export async function historico3(req, res) {
       pub.publish(disTopic, disData);
       db.query(`INSERT INTO historico3 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
         if (err) throw err;
-        console.log(rows);
+        return res.send("OK")
       });
-      return res.send("OK")
     });
   });
 
@@ -181,9 +179,8 @@ export async function historico2(req, res) {
       pub.publish(disTopic, disData);
       db.query(`INSERT INTO historico2 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
         if (err) throw err;
-        console.log(rows);
+        return res.send("OK")
       });
-      return res.send("OK")
     });
   });
 
@@ -226,9 +223,8 @@ export async function historico1(req, res) {
       pub.publish(disTopic, disData);
       db.query(`INSERT INTO historico1 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
         if (err) throw err;
-        console.log(rows);
+        return res.send("OK")
       });
-      return res.send("OK")
     });
   });
 
