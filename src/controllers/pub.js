@@ -105,7 +105,7 @@ export async function leerSensores(req, res) {
           topic = arduino_data[0]
           dataTopic = arduino_data[1]
           pub.publish(topic, dataTopic)
-          db.query(`INSERT INTO notificacion (notificacion) VALUES ('${dataTopic}')`, (err, rows) => {
+          db.query(`INSERT INTO notificaciones (notificacion) VALUES ('${dataTopic}')`, (err, rows) => {
             if (err) throw err;
           });
           pub.end()
