@@ -1,8 +1,9 @@
 import mqtt from 'mqtt'
+import db from '../db.js'
 import { SerialPort, ReadlineParser } from "serialport";
 //------------------------  arduino ----------------------
 // const port = new SerialPort({
-//   path: "COM2",
+//   path: "COM5",
 //   baudRate: 9600,
 // });
 // const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
@@ -10,7 +11,7 @@ import { SerialPort, ReadlineParser } from "serialport";
 
 export async function publishA(req, res) {
   const port = new SerialPort({
-    path: "COM1",
+    path: "COM5",
     baudRate: 9600,
   });
   const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
