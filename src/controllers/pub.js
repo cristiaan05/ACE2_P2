@@ -74,30 +74,42 @@ export async function leerSensores(req, res) {
     });
     const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
     const pub = mqtt.connect("mqtt://localhost:9000");
+    let topic, dataTopic
     let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
     pub.on("connect", () => {
       parser.on("data", (arduino_data) => {
         arduino_data = arduino_data.toString();
         arduino_data = arduino_data.split(" ");
         console.log(arduino_data)
-        //humedadTopic = arduino_data[0];
-        //humedadData = arduino_data[1];
-        tempTopic = arduino_data[0];
-        tempData = arduino_data[1];
-        luzTopic = arduino_data[2];
-        luzData = arduino_data[3];
-        gasTopic = arduino_data[4];
-        gasData = arduino_data[5];
-        disTopic = arduino_data[6];
-        disData = arduino_data[7];
-        //pub.publish(humedadTopic, humedadData);
-        pub.publish(tempTopic, tempData);
-        pub.publish(luzTopic, luzData);
-        pub.publish(gasTopic, gasData);
-        pub.publish(disTopic, disData);
-        db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
-          if (err) throw err;
-        });
+        if (arduino_data.length > 1) {
+          //humedadTopic = arduino_data[0];
+          //humedadData = arduino_data[1];
+          tempTopic = arduino_data[0];
+          tempData = arduino_data[1];
+          luzTopic = arduino_data[2];
+          luzData = arduino_data[3];
+          gasTopic = arduino_data[4];
+          gasData = arduino_data[5];
+          disTopic = arduino_data[6];
+          disData = arduino_data[7];
+          //pub.publish(humedadTopic, humedadData);
+          pub.publish(tempTopic, tempData);
+          pub.publish(luzTopic, luzData);
+          pub.publish(gasTopic, gasData);
+          pub.publish(disTopic, disData);
+          db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
+            if (err) throw err;
+          });
+          pub.end()
+        } else {
+          topic = arduino_data[0]
+          dataTopic = arduino_data[1]
+          pub.publish(topic, dataTopic)
+          db.query(`INSERT INTO notificacion (notificacion) VALUES ('${dataTopic}')`, (err, rows) => {
+            if (err) throw err;
+          });
+          pub.end()
+        }
       });
     });
 
