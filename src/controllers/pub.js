@@ -66,13 +66,13 @@ export async function leerSensores(req, res) {
   });
   const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
   const pub = mqtt.connect("mqtt://localhost:9000");
-
+  let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
   pub.on("connect", () => {
     parser.on("data", (arduino_data) => {
       arduino_data = arduino_data.toString();
       arduino_data = arduino_data.split(" ");
-      humedadTopic = arduino_data[0];
-      humedadData = arduino_data[1];
+      //humedadTopic = arduino_data[0];
+      //humedadData = arduino_data[1];
       tempTopic = arduino_data[2];
       tempData = arduino_data[3];
       luzTopic = arduino_data[4];
@@ -81,7 +81,7 @@ export async function leerSensores(req, res) {
       gasData = arduino_data[7];
       disTopic = arduino_data[8];
       disData = arduino_data[9];
-      pub.publish(humedadTopic, humedadData);
+      //pub.publish(humedadTopic, humedadData);
       pub.publish(tempTopic, tempData);
       pub.publish(luzTopic, luzData);
       pub.publish(gasTopic, gasData);
@@ -90,6 +90,7 @@ export async function leerSensores(req, res) {
         if (err) throw err;
         console.log(rows);
       });
+      return res.send("OK")
     });
   });
 
