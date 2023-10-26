@@ -91,7 +91,6 @@ export async function leerSensores(req, res) {
         pub.publish(disTopic, disData);
         db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
           if (err) throw err;
-          res.send("OK")
         });
       });
     });
@@ -102,6 +101,7 @@ export async function leerSensores(req, res) {
 
     port.on("error", (err) => {
       console.error("Error en la conexión serial:", err);
+      res.status(500).send("Error en la conexión serial:");
     });
   } catch (error) {
     console.error(error);
@@ -140,9 +140,9 @@ export async function historico3(req, res) {
         pub.publish(disTopic, disData);
         db.query(`INSERT INTO historico3 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
           if (err) throw err;
-          res.send("OK")
         });
       });
+      res.status(200).send("OK")
     });
 
     port.on("open", () => {
@@ -190,7 +190,6 @@ export async function historico2(req, res) {
         pub.publish(disTopic, disData);
         db.query(`INSERT INTO historico2 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
           if (err) throw err;
-          res.send("OK")
         });
       });
     });
@@ -239,7 +238,6 @@ export async function historico1(req, res) {
         pub.publish(disTopic, disData);
         db.query(`INSERT INTO historico1 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
           if (err) throw err;
-          res.send("OK")
         });
       });
     });
