@@ -61,180 +61,200 @@ export async function publishB(req, res) {
 }
 
 export async function leerSensores(req, res) {
-  const port = new SerialPort({
-    path: "COM5",
-    baudRate: 9600,
-  });
-  const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
-  const pub = mqtt.connect("mqtt://localhost:9000");
-  let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
-  pub.on("connect", () => {
-    parser.on("data", (arduino_data) => {
-      arduino_data = arduino_data.toString();
-      arduino_data = arduino_data.split(" ");
-      console.log(arduino_data)
-      //humedadTopic = arduino_data[0];
-      //humedadData = arduino_data[1];
-      tempTopic = arduino_data[0];
-      tempData = arduino_data[1];
-      luzTopic = arduino_data[2];
-      luzData = arduino_data[3];
-      gasTopic = arduino_data[4];
-      gasData = arduino_data[5];
-      disTopic = arduino_data[6];
-      disData = arduino_data[7];
-      //pub.publish(humedadTopic, humedadData);
-      pub.publish(tempTopic, tempData);
-      pub.publish(luzTopic, luzData);
-      pub.publish(gasTopic, gasData);
-      pub.publish(disTopic, disData);
-      db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
-        if (err) throw err;
-        return res.send("OK")
+  try {
+    const port = new SerialPort({
+      path: "COM5",
+      baudRate: 9600,
+    });
+    const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+    const pub = mqtt.connect("mqtt://localhost:9000");
+    let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
+    pub.on("connect", () => {
+      parser.on("data", (arduino_data) => {
+        arduino_data = arduino_data.toString();
+        arduino_data = arduino_data.split(" ");
+        console.log(arduino_data)
+        //humedadTopic = arduino_data[0];
+        //humedadData = arduino_data[1];
+        tempTopic = arduino_data[0];
+        tempData = arduino_data[1];
+        luzTopic = arduino_data[2];
+        luzData = arduino_data[3];
+        gasTopic = arduino_data[4];
+        gasData = arduino_data[5];
+        disTopic = arduino_data[6];
+        disData = arduino_data[7];
+        //pub.publish(humedadTopic, humedadData);
+        pub.publish(tempTopic, tempData);
+        pub.publish(luzTopic, luzData);
+        pub.publish(gasTopic, gasData);
+        pub.publish(disTopic, disData);
+        db.query(`INSERT INTO actual (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
+          if (err) throw err;
+          res.send("OK")
+        });
       });
     });
-  });
 
-  port.on("open", () => {
-    console.log("Conexión serial abierta en COM2");
-  });
+    port.on("open", () => {
+      console.log("Conexión serial abierta en COM2");
+    });
 
-  port.on("error", (err) => {
-    console.error("Error en la conexión serial:", err);
-  });
+    port.on("error", (err) => {
+      console.error("Error en la conexión serial:", err);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 }
 
 export async function historico3(req, res) {
-  const port = new SerialPort({
-    path: "COM5",
-    baudRate: 9600,
-  });
-  const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
-  const pub = mqtt.connect("mqtt://localhost:9000");
-  let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
-  pub.on("connect", () => {
-    parser.on("data", (arduino_data) => {
-      arduino_data = arduino_data.toString();
-      arduino_data = arduino_data.split(" ");
-      console.log(arduino_data)
-      //humedadTopic = arduino_data[0];
-      //humedadData = arduino_data[1];
-      tempTopic = arduino_data[0];
-      tempData = arduino_data[1];
-      luzTopic = arduino_data[2];
-      luzData = arduino_data[3];
-      gasTopic = arduino_data[4];
-      gasData = arduino_data[5];
-      disTopic = arduino_data[6];
-      disData = arduino_data[7];
-      //pub.publish(humedadTopic, humedadData);
-      pub.publish(tempTopic, tempData);
-      pub.publish(luzTopic, luzData);
-      pub.publish(gasTopic, gasData);
-      pub.publish(disTopic, disData);
-      db.query(`INSERT INTO historico3 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
-        if (err) throw err;
-        return res.send("OK")
+  try {
+    const port = new SerialPort({
+      path: "COM5",
+      baudRate: 9600,
+    });
+    const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+    const pub = mqtt.connect("mqtt://localhost:9000");
+    let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
+    pub.on("connect", () => {
+      parser.on("data", (arduino_data) => {
+        arduino_data = arduino_data.toString();
+        arduino_data = arduino_data.split(" ");
+        console.log(arduino_data)
+        //humedadTopic = arduino_data[0];
+        //humedadData = arduino_data[1];
+        tempTopic = arduino_data[0];
+        tempData = arduino_data[1];
+        luzTopic = arduino_data[2];
+        luzData = arduino_data[3];
+        gasTopic = arduino_data[4];
+        gasData = arduino_data[5];
+        disTopic = arduino_data[6];
+        disData = arduino_data[7];
+        //pub.publish(humedadTopic, humedadData);
+        pub.publish(tempTopic, tempData);
+        pub.publish(luzTopic, luzData);
+        pub.publish(gasTopic, gasData);
+        pub.publish(disTopic, disData);
+        db.query(`INSERT INTO historico3 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
+          if (err) throw err;
+          res.send("OK")
+        });
       });
     });
-  });
 
-  port.on("open", () => {
-    console.log("Conexión serial abierta en COM2");
-  });
+    port.on("open", () => {
+      console.log("Conexión serial abierta en COM2");
+    });
 
-  port.on("error", (err) => {
-    console.error("Error en la conexión serial:", err);
-  });
+    port.on("error", (err) => {
+      console.error("Error en la conexión serial:", err);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 }
 
 
 export async function historico2(req, res) {
-  const port = new SerialPort({
-    path: "COM5",
-    baudRate: 9600,
-  });
-  const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
-  const pub = mqtt.connect("mqtt://localhost:9000");
-  let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
-  pub.on("connect", () => {
-    parser.on("data", (arduino_data) => {
-      arduino_data = arduino_data.toString();
-      arduino_data = arduino_data.split(" ");
-      console.log(arduino_data)
-      //humedadTopic = arduino_data[0];
-      //humedadData = arduino_data[1];
-      tempTopic = arduino_data[0];
-      tempData = arduino_data[1];
-      luzTopic = arduino_data[2];
-      luzData = arduino_data[3];
-      gasTopic = arduino_data[4];
-      gasData = arduino_data[5];
-      disTopic = arduino_data[6];
-      disData = arduino_data[7];
-      //pub.publish(humedadTopic, humedadData);
-      pub.publish(tempTopic, tempData);
-      pub.publish(luzTopic, luzData);
-      pub.publish(gasTopic, gasData);
-      pub.publish(disTopic, disData);
-      db.query(`INSERT INTO historico2 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
-        if (err) throw err;
-        return res.send("OK")
+  try {
+    const port = new SerialPort({
+      path: "COM5",
+      baudRate: 9600,
+    });
+    const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+    const pub = mqtt.connect("mqtt://localhost:9000");
+    let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
+    pub.on("connect", () => {
+      parser.on("data", (arduino_data) => {
+        arduino_data = arduino_data.toString();
+        arduino_data = arduino_data.split(" ");
+        console.log(arduino_data)
+        //humedadTopic = arduino_data[0];
+        //humedadData = arduino_data[1];
+        tempTopic = arduino_data[0];
+        tempData = arduino_data[1];
+        luzTopic = arduino_data[2];
+        luzData = arduino_data[3];
+        gasTopic = arduino_data[4];
+        gasData = arduino_data[5];
+        disTopic = arduino_data[6];
+        disData = arduino_data[7];
+        //pub.publish(humedadTopic, humedadData);
+        pub.publish(tempTopic, tempData);
+        pub.publish(luzTopic, luzData);
+        pub.publish(gasTopic, gasData);
+        pub.publish(disTopic, disData);
+        db.query(`INSERT INTO historico2 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
+          if (err) throw err;
+          res.send("OK")
+        });
       });
     });
-  });
 
-  port.on("open", () => {
-    console.log("Conexión serial abierta en COM2");
-  });
+    port.on("open", () => {
+      console.log("Conexión serial abierta en COM2");
+    });
 
-  port.on("error", (err) => {
-    console.error("Error en la conexión serial:", err);
-  });
+    port.on("error", (err) => {
+      console.error("Error en la conexión serial:", err);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 }
 
 export async function historico1(req, res) {
-  const port = new SerialPort({
-    path: "COM5",
-    baudRate: 9600,
-  });
-  const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
-  const pub = mqtt.connect("mqtt://localhost:9000");
-  let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
-  pub.on("connect", () => {
-    parser.on("data", (arduino_data) => {
-      arduino_data = arduino_data.toString();
-      arduino_data = arduino_data.split(" ");
-      console.log(arduino_data)
-      //humedadTopic = arduino_data[0];
-      //humedadData = arduino_data[1];
-      tempTopic = arduino_data[0];
-      tempData = arduino_data[1];
-      luzTopic = arduino_data[2];
-      luzData = arduino_data[3];
-      gasTopic = arduino_data[4];
-      gasData = arduino_data[5];
-      disTopic = arduino_data[6];
-      disData = arduino_data[7];
-      //pub.publish(humedadTopic, humedadData);
-      pub.publish(tempTopic, tempData);
-      pub.publish(luzTopic, luzData);
-      pub.publish(gasTopic, gasData);
-      pub.publish(disTopic, disData);
-      db.query(`INSERT INTO historico1 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
-        if (err) throw err;
-        return res.send("OK")
+  try {
+    const port = new SerialPort({
+      path: "COM5",
+      baudRate: 9600,
+    });
+    const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+    const pub = mqtt.connect("mqtt://localhost:9000");
+    let tempTopic, tempData, luzTopic, luzData, gasTopic, gasData, disTopic, disData
+    pub.on("connect", () => {
+      parser.on("data", (arduino_data) => {
+        arduino_data = arduino_data.toString();
+        arduino_data = arduino_data.split(" ");
+        console.log(arduino_data)
+        //humedadTopic = arduino_data[0];
+        //humedadData = arduino_data[1];
+        tempTopic = arduino_data[0];
+        tempData = arduino_data[1];
+        luzTopic = arduino_data[2];
+        luzData = arduino_data[3];
+        gasTopic = arduino_data[4];
+        gasData = arduino_data[5];
+        disTopic = arduino_data[6];
+        disData = arduino_data[7];
+        //pub.publish(humedadTopic, humedadData);
+        pub.publish(tempTopic, tempData);
+        pub.publish(luzTopic, luzData);
+        pub.publish(gasTopic, gasData);
+        pub.publish(disTopic, disData);
+        db.query(`INSERT INTO historico1 (temperatura,luz,aire,proximidad) VALUES ('${tempData}','${luzData}','${gasData}',${parseInt(disData)})`, (err, rows) => {
+          if (err) throw err;
+          res.send("OK")
+        });
       });
     });
-  });
 
-  port.on("open", () => {
-    console.log("Conexión serial abierta en COM2");
-  });
+    port.on("open", () => {
+      console.log("Conexión serial abierta en COM2");
+    });
 
-  port.on("error", (err) => {
-    console.error("Error en la conexión serial:", err);
-  });
+    port.on("error", (err) => {
+      console.error("Error en la conexión serial:", err);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 }
 //actual: temp,luz,aire,proximidad
 //notificaciones: tipoNotificacion
