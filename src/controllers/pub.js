@@ -81,7 +81,7 @@ export async function leerSensores(req, res) {
         arduino_data = arduino_data.toString();
         arduino_data = arduino_data.split(" ");
         console.log(arduino_data)
-        if (arduino_data.length > 1) {
+        if (arduino_data.length > 2) {
           //humedadTopic = arduino_data[0];
           //humedadData = arduino_data[1];
           tempTopic = arduino_data[0];
